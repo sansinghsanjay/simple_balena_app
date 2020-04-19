@@ -35,12 +35,19 @@ client.connect("test.mosquitto.org", 1883, 60)
 
 # publish 30 random values after 2 second interval
 for i in range(30):
+	# open config file and read the value
+	file_ptr = open("./config.txt", "r")
+	data = file_ptr.read()
+	data = data.strip()
+	data = int(data.split(":")[1])
+	file_ptr.close()
 	# get a random value within 0 and 100
 	random_pressure_value = random.randint(0, 100)
 	# publish this value
 	client.publish("topic/string/sansingh", random_pressure_value)
+	client.publish("topic/string/config_value", data)
 	# update status
-	print(i, ". Sent: ", random_pressure_value)
+	print(i, ". Sent: ", random_pressure_value, "    Data: ", data)
 	# pause execution for 2 seconds
 	time.sleep(2)
 
